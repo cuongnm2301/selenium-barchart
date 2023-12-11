@@ -3,15 +3,13 @@ const { Builder, By, Capabilities, until } = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
 
 function extractNumbersAndPercentages(str) {
-  // Regular expression to match numbers (with decimal points and signs) and percentages
-  const regex = /[+-]?\d+(\.\d+)?%?/g;
-  // Find all matches
-  const matches = str.match(regex);
+  const regex = /-?\b\d+(?:,\d+)*(?:\.\d+)?%?/g;
+  let numbers = str.match(regex);
 
   return {
-    last_price: matches[0],
-    net_change_value: matches[1],
-    net_change_percent: matches[2],
+    last_price: numbers[0],
+    net_change_value: numbers[1],
+    net_change_percent: numbers[2],
   };
 }
 
@@ -19,7 +17,7 @@ function getColorForValue(value) {
   if (value && value.includes("-")) {
     return "FFFF0000"; // Red for negative values
   } else if (value && value.includes("+")) {
-    return "FF00FF00"; // Green for positive values
+    return "00b050"; // Green for positive values
   }
   return "FF000000";
 }
@@ -108,7 +106,7 @@ const input_map = [
     },
   },
   {
-    url: "https://www.barchart.com/futures/quotes/SBN24/overview",
+    url: "https://www.barchart.com/futures/quotes/SBN24/performance",
     sheet: {
       last_price: "C16",
       net_change_value: "D16",
@@ -124,7 +122,7 @@ const input_map = [
     },
   },
   {
-    "url": "https://www.barchart.com/futures/quotes/SBV24/overview",
+    "url": "https://www.barchart.com/futures/quotes/SBV24/performance",
     "sheet": {
       "last_price": "C18",
       "net_change_value": "D18",
@@ -140,7 +138,7 @@ const input_map = [
     }
   },
   {
-    "url": "https://www.barchart.com/futures/quotes/SWH24/overview",
+    "url": "https://www.barchart.com/futures/quotes/SWH24/performance",
     "sheet": {
       "last_price": "C21",
       "net_change_value": "D21",
@@ -156,7 +154,7 @@ const input_map = [
     }
   },
   {
-    "url": "https://www.barchart.com/futures/quotes/SWk24/overview",
+    "url": "https://www.barchart.com/futures/quotes/SWk24/performance",
     "sheet": {
       "last_price": "C23",
       "net_change_value": "D23",
@@ -172,7 +170,7 @@ const input_map = [
     }
   },
   {
-    "url": "https://www.barchart.com/futures/quotes/SWq24/overview",
+    "url": "https://www.barchart.com/futures/quotes/SWq24/performance",
     "sheet": {
       "last_price": "C25",
       "net_change_value": "D25",
@@ -188,7 +186,7 @@ const input_map = [
     }
   },
   {
-    "url": "https://www.barchart.com/futures/quotes/SWV24/overview",
+    "url": "https://www.barchart.com/futures/quotes/SWV24/performance",
     "sheet": {
       "last_price": "C27",
       "net_change_value": "D27",
@@ -204,7 +202,7 @@ const input_map = [
     }
   },
   {
-    "url": "https://www.barchart.com/futures/quotes/SWZ24/overview",
+    "url": "https://www.barchart.com/futures/quotes/SWZ24/performance",
     "sheet": {
       "last_price": "C29",
       "net_change_value": "D29",
@@ -220,7 +218,7 @@ const input_map = [
     }
   },
   {
-    "url": "https://www.barchart.com/futures/quotes/GCY00/overview",
+    "url": "https://www.barchart.com/futures/quotes/GCY00/performance",
     "sheet": {
       "last_price": "C32",
       "net_change_value": "D32",
@@ -236,7 +234,7 @@ const input_map = [
     }
   },
   {
-      "url": "https://www.barchart.com/futures/quotes/CLF24/overview",
+      "url": "https://www.barchart.com/futures/quotes/CLF24/performance",
       "sheet": {
         "last_price": "C35",
         "net_change_value": "D35",
@@ -252,7 +250,7 @@ const input_map = [
       }
     },
     {
-      "url": "https://www.barchart.com/futures/quotes/QAG24/overview",
+      "url": "https://www.barchart.com/futures/quotes/QAG24/performance",
       "sheet": {
         "last_price": "C37",
         "net_change_value": "D37",
@@ -268,7 +266,7 @@ const input_map = [
       }
     },
     {
-      "url": "https://www.barchart.com/futures/quotes/RBF24/overview",
+      "url": "https://www.barchart.com/futures/quotes/RBF24/performance",
       "sheet": {
         "last_price": "C39",
         "net_change_value": "D39",
@@ -284,7 +282,7 @@ const input_map = [
       }
     },
     {
-      "url": "https://www.barchart.com/futures/quotes/ZKY00/overview",
+      "url": "https://www.barchart.com/futures/quotes/ZKY00/performance",
       "sheet": {
         "last_price": "C41",
         "net_change_value": "D41",
@@ -300,7 +298,7 @@ const input_map = [
       }
     },
     {
-        "url": "https://www.barchart.com/stocks/quotes/$DXY/overview",
+        "url": "https://www.barchart.com/stocks/quotes/$DXY/performance",
         "sheet": {
           "last_price": "C44",
           "net_change_value": "D44",
@@ -316,7 +314,7 @@ const input_map = [
         }
     },
     {
-        "url": "https://www.barchart.com/forex/quotes/%5EUSDAUD/overview",
+        "url": "https://www.barchart.com/forex/quotes/%5EUSDAUD/performance",
         "sheet": {
           "last_price": "C46",
           "net_change_value": "D46",
@@ -332,7 +330,7 @@ const input_map = [
         }
     },
     {
-        "url": "https://www.barchart.com/forex/quotes/%5EUSDBRL/overview",
+        "url": "https://www.barchart.com/forex/quotes/%5EUSDBRL/performance",
         "sheet": {
           "last_price": "C48",
           "net_change_value": "D48",
@@ -348,7 +346,7 @@ const input_map = [
         }
     },
     {
-        "url": "https://www.barchart.com/forex/quotes/%5EUSDEUR/overview",
+        "url": "https://www.barchart.com/forex/quotes/%5EUSDEUR/performance",
         "sheet": {
           "last_price": "C50",
           "net_change_value": "D50",
@@ -364,7 +362,7 @@ const input_map = [
         }
     },
     {
-        "url": "https://www.barchart.com/forex/quotes/%5EUSDJPY/overview",
+        "url": "https://www.barchart.com/forex/quotes/%5EUSDJPY/performance",
         "sheet": {
           "last_price": "C52",
           "net_change_value": "D52",
@@ -380,7 +378,7 @@ const input_map = [
         }
     },
     {
-        "url": "https://www.barchart.com/forex/quotes/%5EUSDINR/overview",
+        "url": "https://www.barchart.com/forex/quotes/%5EUSDINR/performance",
         "sheet": {
           "last_price": "C54",
           "net_change_value": "D54",
@@ -396,7 +394,7 @@ const input_map = [
         }
     },
     {
-        "url": "https://www.barchart.com/forex/quotes/%5EUSDCNY/overview",
+        "url": "https://www.barchart.com/forex/quotes/%5EUSDCNY/performance",
         "sheet": {
           "last_price": "C56",
           "net_change_value": "D56",
@@ -412,7 +410,7 @@ const input_map = [
         }
     },
     {
-        "url": "https://www.barchart.com/forex/quotes/%5EUSDTHB/overview",
+        "url": "https://www.barchart.com/forex/quotes/%5EUSDTHB/performance",
         "sheet": {
           "last_price": "C58",
           "net_change_value": "D58",
@@ -428,7 +426,7 @@ const input_map = [
         }
     },
     {
-        "url": "https://www.barchart.com/forex/quotes/%5EUSDVND/overview",
+        "url": "https://www.barchart.com/forex/quotes/%5EUSDVND/performance",
         "sheet": {
           "last_price": "C60",
           "net_change_value": "D60",
