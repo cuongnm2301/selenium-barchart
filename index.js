@@ -3,7 +3,7 @@ const { Builder, By, Capabilities, until } = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
 
 function extractNumbersAndPercentages(str) {
-  const regex = /-?\b\d+(?:,\d+)*(?:\.\d+)?%?/g;
+  const regex = /[+-]?\b\d+(?:,\d+)*(?:\.\d+)?%?/g;
   let numbers = str.match(regex);
 
   return {
